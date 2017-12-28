@@ -1,0 +1,9 @@
+version: '2.3'
+services:
+  dhcpd:
+    build:
+      context: dhcpd
+    network_mode: host
+    command: ["vboxnet0"]
+    volumes:
+    - ./dhcpd/dhcpd.conf:/etc/dhcpd.conf:ro
