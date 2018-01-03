@@ -7,29 +7,18 @@ services:
     command: ["vboxnet0"]
     volumes:
     - ./dhcpd/dhcpd.conf:/etc/dhcpd.conf:ro
-  ipxe-build:
-    build:
-      context: ipxe-build
-    command: "/bin/sh -c '[ -f bin/undionly.kxpe ] && make bin/undionly.kpxe || echo bin/undionly.kpxe already built'"
-    volumes:
-    - ./ipxe-build/bin:/ipxe/src/bin
-  tftpd:
-    build:
-      context: tftpd
-    depends_on:
-    - ipxe-build
-    volumes:
-    - ./ipxe-build/bin/undionly.kpxe:/tftproot/undionly.kpxe:ro
-    network_mode: host
-    command: ["-a", "192.168.56.1"]
+#  tftpd:
+#    build:
+#      context: tftpd
+#    volumes:
+#    - ./ipxe-build/bin/undionly.kpxe:/tftproot/undionly.kpxe:ro
+#    network_mode: host
+#    command: ["-a", "192.168.56.1"]
   httpd:
     build:
       context: nginx
-    depends_on:
-    - ipxe-build
     volumes:
     - ./nginx/www:/srv/http:ro
-    - ./ipxe-build/bin/undionly.kpxe:/srv/http/undionly.kpxe:ro
     cap_add:
     - NET_BIND_SERVICE
     ports:
