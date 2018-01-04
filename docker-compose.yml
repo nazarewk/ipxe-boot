@@ -7,14 +7,27 @@ services:
     command: ["vboxnet0"]
     volumes:
     - ./dhcpd/dhcpd.conf:/etc/dhcpd.conf:ro
-  tftpd:
+
+#  tftpd:
+#    build:
+#      context: tftpd
+#    volumes:
+#    - ./media:/data/media:ro
+#    - ./static:/data/static:ro
+#    network_mode: host
+#    command: ["-a", "192.168.56.1"]
+
+  nfsd:
     build:
-      context: tftpd
+      context: nfsd
+    privileged: true
     volumes:
     - ./media:/data/media:ro
     - ./static:/data/static:ro
-    network_mode: host
-    command: ["-a", "192.168.56.1"]
+    ports:
+    - "192.168.56.1:111:111/udp"
+    - "192.168.56.1:2049:2049/tcp"
+    - "192.168.56.1:2049:2049/udp"
 
   nginx:
     build:
