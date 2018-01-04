@@ -1,6 +1,6 @@
 #!ipxe
 set http http://${next-server}
-set nfs nfs:${next-server}:/data
+set nfs nfs:${next-server}:
 set coreos-sshkey ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4b8LlgRQjzzMO98mDfyJnFcae4OjjRgayRGb2BsX8l krna@dc-krna
 
 #set menu-timeout 5000
