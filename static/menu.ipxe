@@ -68,8 +68,8 @@ set opts ${opts} modloop=${base-url}/boot/modloop-hardened
 #set opts ${opts} debug
 set opts ${opts} quiet
 set opts ${opts} alpine_dev=tmpfs:
-#set opts ${opts} alpine_repo=${base-url}/apks/
-set opts ${opts} alpine_repo=auto
+set opts ${opts} alpine_repo=${base-url}/apks/
+#set opts ${opts} alpine_repo=auto
 
 kernel ${base-url}/boot/vmlinuz-hardened ${opts}
 initrd ${base-url}/boot/initramfs-hardened
@@ -86,6 +86,7 @@ initrd ${base-url}/arch/boot/x86_64/archiso.img
 
 boot || goto failed
 goto start
+
 
 :coreos
 set base-url ${http}/media/${selected}
