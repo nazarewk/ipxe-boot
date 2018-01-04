@@ -60,17 +60,18 @@ goto start
 :alpine-standard
 :alpine-extended
 set path ${http}/media/${selected}
-echo Booting Alpine Linux from ${path}
+echo Booting Alpine Linux from ${base-url}
 
 set opts
 set opts ${opts} ip=dhcp nomodeset
-set opts ${opts} modloop=${path}/boot/modloop-hardened
-set opts ${opts} debug
+set opts ${opts} modloop=${base-url}/boot/modloop-hardened
+#set opts ${opts} debug
+set opts ${opts} quiet
 set opts ${opts} alpine_dev=tmpfs:
-#set opts ${opts} alpine_repo=${path}/apks/
+set opts ${opts} alpine_repo=${base-url}/apks/
 
-kernel ${path}/boot/vmlinuz-hardened ${opts}
-initrd ${path}/boot/initramfs-hardened
+kernel ${base-url}/boot/vmlinuz-hardened ${opts}
+initrd ${base-url}/boot/initramfs-hardened
 sleep 5
 boot || goto failed
 goto start
@@ -78,9 +79,9 @@ goto start
 
 :archlinux
 set path ${http}/media/${selected}
-echo Booting Arch Linux from ${path}
-kernel ${path}/arch/boot/x86_64/vmlinuz archisobasedir=arch archiso_http_srv=${path}/ ip=::
-initrd ${path}/arch/boot/x86_64/archiso.img
+echo Booting Arch Linux from ${base-url}
+kernel ${base-url}/arch/boot/x86_64/vmlinuz archisobasedir=arch archiso_http_srv=${base-url}/ ip=::
+initrd ${base-url}/arch/boot/x86_64/archiso.img
 
 boot || goto failed
 goto start
