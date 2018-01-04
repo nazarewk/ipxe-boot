@@ -108,6 +108,7 @@ set opts
 #set opts ${opts} rancher.autologin
 set opts ${opts} rancher.autologin=tty1
 #set opts ${opts} rancher.state.dev=LABEL=RANCHER_STATE rancher.state.autoformat=[/dev/sda]
+set opts ${opts} rancher.password=nazarewk
 #set opts ${opts} rancher.cloud_init.datasources=[url:http://example.com/cloud-config]
 kernel ${base-url}/vmlinuz ${opts}
 initrd ${base-url}/initrd
