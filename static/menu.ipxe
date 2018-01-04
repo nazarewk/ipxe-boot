@@ -1,0 +1,98 @@
+#!ipxe
+set http http://${next-server}
+
+set coreos-sshkey ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4b8LlgRQjzzMO98mDfyJnFcae4OjjRgayRGb2BsX8l krna@dc-krna
+
+#set menu-timeout 5000
+#set submenu-timeout ${menu-timeout}
+isset ${menu-default} || set menu-default exit
+
+###################### MAIN MENU ####################################
+
+:start
+menu iPXE boot menu
+item --gap --             ------------------------- Operating systems ------------------------------
+item --key s alpine-standard       Alpine Linux - Standard (alpine-standard-${alpine-version}.iso)
+item --key e alpine-extended       Alpine Linux - Extended (alpine-extended-${alpine-version}.iso)
+item --key a archiso       Arch Linux (archiso)
+item --key c coreos          CoreOS
+item --gap --             ------------------------- Advanced options -------------------------------
+item config       Configure settings
+item shell                Drop to iPXE shell
+item reboot               Reboot computer
+item
+item --key x exit         Exit iPXE and continue BIOS boot
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+set menu-timeout 0
+goto ${selected}
+
+:cancel
+echo You cancelled the menu, dropping you to a shell
+
+:shell
+echo Type 'exit' to get the back to the menu
+shell
+set menu-timeout 0
+set submenu-timeout 0
+goto start
+
+:failed
+echo Booting failed, dropping to shell
+goto shell
+
+:reboot
+reboot
+
+:exit
+exit
+
+:config
+config
+goto start
+
+:back
+set submenu-timeout 0
+clear submenu-default
+goto start
+
+############ MAIN MENU ITEMS ############
+
+:alpine-standard
+:alpine-extended
+set path ${http}/media/${selected}
+echo Booting Alpine Linux from ${path}
+
+set opts
+set opts ${opts} ip=dhcp nomodeset
+set opts ${opts} modloop=${path}/boot/modloop-hardened
+set opts ${opts} debug
+set opts ${opts} alpine_dev=tmpfs:
+#set opts ${opts} alpine_repo=${path}/apks/
+
+kernel ${path}/boot/vmlinuz-hardened ${opts}
+initrd ${path}/boot/initramfs-hardened
+sleep 5
+boot || goto failed
+goto start
+
+
+:archlinux
+set path ${http}/media/${selected}
+echo Booting Arch Linux from ${path}
+kernel ${path}/arch/boot/x86_64/vmlinuz archisobasedir=arch archiso_http_srv=${path}/ ip=::
+initrd ${path}/arch/boot/x86_64/archiso.img
+
+boot || goto failed
+goto start
+
+:coreos
+set base-url ${http}/media/${selected}
+echo Booting CoresOS ${base-url}
+set opts sshkey="${coreos-sshkey}"
+set opts ${opts} coreos.autologin
+#set opts ${opts} coreos.first_boot=1 coreos.config.url=https://example.com/pxe-config.ign
+kernel ${base-url}/coreos_production_pxe.vmlinuz ${opts}
+initrd ${base-url}/coreos_production_pxe_image.cpio.gz
+
+boot || goto failed
+goto start
