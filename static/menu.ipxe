@@ -59,15 +59,16 @@ goto start
 
 :alpine-standard
 :alpine-extended
+set base-nfs ${nfs}/media/${selected}
 set base-url ${http}/media/${selected}
 echo Booting Alpine Linux from ${base-url}
 
 set opts
 set opts ${opts} ip=dhcp nomodeset
-#set opts ${opts} modloop=${base-url}/boot/modloop-hardened
+set opts ${opts} modloop=${base-url}/boot/modloop-hardened
 #set opts ${opts} debug
 set opts ${opts} quiet
-set opts ${opts} alpine_dev=${nfs}/media/${selected}/root
+set opts ${opts} alpine_dev=${base-nfs}/root
 
 echo Arguments: ${opts}
 kernel ${base-url}/boot/vmlinuz-hardened ${opts}

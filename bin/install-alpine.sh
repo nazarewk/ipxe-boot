@@ -10,6 +10,6 @@ wget http://dl-cdn.alpinelinux.org/alpine/v$(printf "%.3s" ${version})/releases/
 
 7z x -y ${filename}
 
-mkdir -p root
-7z x -y boot/modloop-hardened -oroot/.modloop
-cp -R apks/ root/
+# mkdir -p root
+# 7z x -y boot/modloop-hardened -oroot/.modloop
+# cp -R apks/ root/
