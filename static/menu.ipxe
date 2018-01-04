@@ -1,6 +1,6 @@
 #!ipxe
 set http http://${next-server}
-set nfs ${next-server}
+set nfs nfs:${next-server}:/data
 set coreos-sshkey ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4b8LlgRQjzzMO98mDfyJnFcae4OjjRgayRGb2BsX8l krna@dc-krna
 
 #set menu-timeout 5000
@@ -64,13 +64,12 @@ echo Booting Alpine Linux from ${base-url}
 
 set opts
 set opts ${opts} ip=dhcp nomodeset
-set opts ${opts} modloop=${base-url}/boot/modloop-hardened
+#set opts ${opts} modloop=${base-url}/boot/modloop-hardened
 #set opts ${opts} debug
 set opts ${opts} quiet
-set opts ${opts} alpine_dev=nfs:${next-server}:/data/media/alpine-nfsroot
-#set opts ${opts} alpine_repo=${base-url}/apks/
-#set opts ${opts} alpine_repo=auto
+set opts ${opts} alpine_dev=${nfs}/media/${selected}/root
 
+echo Arguments: ${opts}
 kernel ${base-url}/boot/vmlinuz-hardened ${opts}
 initrd ${base-url}/boot/initramfs-hardened
 sleep 5

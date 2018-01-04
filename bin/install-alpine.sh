@@ -9,3 +9,7 @@ cd media/${name}
 wget http://dl-cdn.alpinelinux.org/alpine/v$(printf "%.3s" ${version})/releases/x86_64/${filename} -O ${filename}
 
 7z x -y ${filename}
+
+mkdir -p root
+7z x -y boot/modloop-hardened -oroot/.modloop
+cp -R apks/ root/
