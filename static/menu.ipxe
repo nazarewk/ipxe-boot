@@ -2,8 +2,7 @@
 set http http://${next-server}
 set nfs nfs:${next-server}:
 
-# set sshkey ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4b8LlgRQjzzMO98mDfyJnFcae4OjjRgayRGb2BsX8l krna@dc-krna
-set sshkey ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC6Hl/p9KqO6jVHOTy8CKHbM7O259UpS9P0F0yJIxyTsrsIVU5bRTh8E8RKs/XUTG7qR8jwmYY+kYffEyR1fo8QNcGB3/2CNDLzirigGaxdxf623sd6IESI/mYdlxgWJCJrdP7gWeHK4HvARlh+2N+Jhm8VX9H9F01svjAUTtcVO9jwE7Ph0tt6QDJBH/ncClOKpc0WMTBKpzFzVFpvwk4peBEN9q6DDTJYCw9CcY0O8Pz4jRkrk0vKgX0yvdwHDF1/cWR6U5o3AREPRPmRnZWKyOZoo6zNC5XHG2vZkUo9rrEzZ+RTBtxDpZZfFZSkKauhePCHzZaaBvxEBi2XzdK7BKIR2nm3tHvaERaNVf/VGm/psJfydsLBJQgo1FPbe/w3cutAG6p+55JVPdTe3vdt7wZGG/SYxbmndDIGYzObsE6FNWX8eVbTtCutcGqVgDnhy/ZcFjP2wElvRXC8pN9kjEbEYrI4bD9wjBexhlym7PDCRkq9sqAwlyD6xuhFv7tUCPsA8j2NVsAf2z2R8CtcnrBKL/RDURcOQ2EaXu9JtwbwvV8j8TVppy1FNzu/ZpbYL2zBdHrFZYaQT1zq4eSXG3pkLgdzWG7ONsI9vee7jOQsUu5S2tAxg0r4+VbuQ+CpVEq9Fd9tgIOuIcsPgq9mNyaekLXDKyzGULKXOxffKw== krna@krna
+set sshkey ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAYEAvM4y0G5vZ2OYlSeGn2w7y/s+VZMzhGGb9rlUkDtWtwvsE2TWlApFyHggn6qObmQ5DUOu0Mhy6l/ojylyp2Q/C7FMoQWkeBorLKvxf8KFE1lJktCXCxJyptDn8kkNi6Fxszig/flrp5lSWWjDCafyVeyFhvMo22fblzjPOG//wu0+RnOLn9eiWC2CUvJjG11AH+AxWI4UMXY93gq5K1YVLd3EmhI/L1ITAoY3cXoheP0TW9epqe0Zq6lGO+gLiYeWgZJiolSqcHCkTzopbkIZ2cP+yEdeJrYp8ibdO7H0oyXOy48yPElkEobcISzQmTayXQfXyr9YzFPGdM0ZxxKPfpmMox2DTL+mpo1etLOf7ihJNBoR6aAcAWeYLdfqmIlWnVVySW1RPcq31tR4uCP6jpDsbEArXP7lttkWzb0EuBRKN94OVsl7gHuqSSdnrWJwU6jn8EAi9krRQtOKUrz62nOmAkWIe/4fM/3CVjuOgTSUkmuu15SgrbN9aLYp0ct/ 2c:c0:54:ed:f6:0d:00:05:50:be:73:ea:f5:23:20:a7 nazarewk
 
 #set menu-timeout 5000
 #set submenu-timeout ${menu-timeout}
@@ -106,6 +105,8 @@ goto start
 echo Booting RancherOS ${base-url}
 
 set opts
+#set opts ${opts} rancher.autologin
+set opts ${opts} rancher.autologin=tty1
 #set opts ${opts} rancher.state.dev=LABEL=RANCHER_STATE rancher.state.autoformat=[/dev/sda]
 #set opts ${opts} rancher.cloud_init.datasources=[url:http://example.com/cloud-config]
 kernel ${base-url}/vmlinuz ${opts}
