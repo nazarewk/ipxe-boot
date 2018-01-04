@@ -1,7 +1,9 @@
 #!ipxe
 set http http://${next-server}
 set nfs nfs:${next-server}:
-set coreos-sshkey ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4b8LlgRQjzzMO98mDfyJnFcae4OjjRgayRGb2BsX8l krna@dc-krna
+
+# set sshkey ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4b8LlgRQjzzMO98mDfyJnFcae4OjjRgayRGb2BsX8l krna@dc-krna
+set sshkey ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC6Hl/p9KqO6jVHOTy8CKHbM7O259UpS9P0F0yJIxyTsrsIVU5bRTh8E8RKs/XUTG7qR8jwmYY+kYffEyR1fo8QNcGB3/2CNDLzirigGaxdxf623sd6IESI/mYdlxgWJCJrdP7gWeHK4HvARlh+2N+Jhm8VX9H9F01svjAUTtcVO9jwE7Ph0tt6QDJBH/ncClOKpc0WMTBKpzFzVFpvwk4peBEN9q6DDTJYCw9CcY0O8Pz4jRkrk0vKgX0yvdwHDF1/cWR6U5o3AREPRPmRnZWKyOZoo6zNC5XHG2vZkUo9rrEzZ+RTBtxDpZZfFZSkKauhePCHzZaaBvxEBi2XzdK7BKIR2nm3tHvaERaNVf/VGm/psJfydsLBJQgo1FPbe/w3cutAG6p+55JVPdTe3vdt7wZGG/SYxbmndDIGYzObsE6FNWX8eVbTtCutcGqVgDnhy/ZcFjP2wElvRXC8pN9kjEbEYrI4bD9wjBexhlym7PDCRkq9sqAwlyD6xuhFv7tUCPsA8j2NVsAf2z2R8CtcnrBKL/RDURcOQ2EaXu9JtwbwvV8j8TVppy1FNzu/ZpbYL2zBdHrFZYaQT1zq4eSXG3pkLgdzWG7ONsI9vee7jOQsUu5S2tAxg0r4+VbuQ+CpVEq9Fd9tgIOuIcsPgq9mNyaekLXDKyzGULKXOxffKw== krna@krna
 
 #set menu-timeout 5000
 #set submenu-timeout ${menu-timeout}
@@ -12,10 +14,11 @@ isset ${menu-default} || set menu-default exit
 :start
 menu iPXE boot menu
 item --gap --             ------------------------- Operating systems ------------------------------
-item --key s alpine-standard       Alpine Linux - Standard
-item --key e alpine-extended       Alpine Linux - Extended
-item --key a archiso       Arch Linux (archiso)
-item --key c coreos          CoreOS
+item --key s alpine-standard        Alpine Linux - Standard
+item --key e alpine-extended        Alpine Linux - Extended
+item --key a archiso                Arch Linux (archiso)
+item --key c coreos                 CoreOS
+item --key r rancher                RancherOS
 item --gap --             ------------------------- Advanced options -------------------------------
 item config       Configure settings
 item shell                Drop to iPXE shell
@@ -24,6 +27,9 @@ item
 item --key x exit         Exit iPXE and continue BIOS boot
 choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
 set menu-timeout 0
+
+set base-nfs ${nfs}/media/${selected}
+set base-url ${http}/media/${selected}
 goto ${selected}
 
 :cancel
@@ -59,8 +65,6 @@ goto start
 
 :alpine-standard
 :alpine-extended
-set base-nfs ${nfs}/media/${selected}
-set base-url ${http}/media/${selected}
 echo Booting Alpine Linux from ${base-url}
 
 set opts
@@ -79,7 +83,6 @@ goto start
 
 
 :archlinux
-set base-url ${http}/media/${selected}
 echo Booting Arch Linux from ${base-url}
 kernel ${base-url}/arch/boot/x86_64/vmlinuz archisobasedir=arch archiso_http_srv=${base-url}/ ip=::
 initrd ${base-url}/arch/boot/x86_64/archiso.img
@@ -89,9 +92,8 @@ goto start
 
 
 :coreos
-set base-url ${http}/media/${selected}
 echo Booting CoresOS ${base-url}
-set opts sshkey="${coreos-sshkey}"
+set opts sshkey="${sshkey}"
 set opts ${opts} coreos.autologin
 #set opts ${opts} coreos.first_boot=1 coreos.config.url=https://example.com/pxe-config.ign
 kernel ${base-url}/coreos_production_pxe.vmlinuz ${opts}
@@ -99,3 +101,16 @@ initrd ${base-url}/coreos_production_pxe_image.cpio.gz
 
 boot || goto failed
 goto start
+
+:rancher
+echo Booting RancherOS ${base-url}
+
+set opts
+#set opts ${opts} rancher.state.dev=LABEL=RANCHER_STATE rancher.state.autoformat=[/dev/sda]
+#set opts ${opts} rancher.cloud_init.datasources=[url:http://example.com/cloud-config]
+kernel ${base-url}/vmlinuz ${opts}
+initrd ${base-url}/initrd
+
+boot || goto failed
+goto start
+
