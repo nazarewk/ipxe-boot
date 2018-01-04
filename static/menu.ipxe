@@ -12,8 +12,8 @@ isset ${menu-default} || set menu-default exit
 :start
 menu iPXE boot menu
 item --gap --             ------------------------- Operating systems ------------------------------
-item --key s alpine-standard       Alpine Linux - Standard (alpine-standard-${alpine-version}.iso)
-item --key e alpine-extended       Alpine Linux - Extended (alpine-extended-${alpine-version}.iso)
+item --key s alpine-standard       Alpine Linux - Standard
+item --key e alpine-extended       Alpine Linux - Extended
 item --key a archiso       Arch Linux (archiso)
 item --key c coreos          CoreOS
 item --gap --             ------------------------- Advanced options -------------------------------
