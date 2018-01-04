@@ -1,0 +1,3 @@
+/data *(rw,fsid=0,async,no_subtree_check,no_auth_nlm,insecure,no_root_squash)
+/data/media *(rw,sync,no_subtree_check)
+/data/static *(rw,sync,no_subtree_check)
