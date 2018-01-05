@@ -34,6 +34,8 @@ storage:
 
           echo -n ${ip}
 etcd:
+  # https://discovery.etcd.io/new?size=2
+  discovery: https://discovery.etcd.io/b5df2c1d7f0e33418ece1340b9f4ca28
   advertise_client_urls: http://{PRIVATE_IPV4}:2379
   initial_advertise_peer_urls: http://{PRIVATE_IPV4}:2380
   listen_client_urls: http://0.0.0.0:2379
