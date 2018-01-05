@@ -6,7 +6,7 @@ name=alpine-${release}
 filename=${name}-${version}-x86_64.iso
 mkdir -p media/${name} media/alpine-nfsroot
 cd media/${name}
-wget http://dl-cdn.alpinelinux.org/alpine/v$(printf "%.3s" ${version})/releases/x86_64/${filename} -O ${filename}
+wget -N http://dl-cdn.alpinelinux.org/alpine/v$(printf "%.3s" ${version})/releases/x86_64/${filename} -O ${filename}
 
 7z x -y ${filename}
 

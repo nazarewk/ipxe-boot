@@ -17,18 +17,18 @@ services:
 #    network_mode: host
 #    command: ["-a", "192.168.56.1"]
 
-  nfsd:
-    build:
-      context: nfsd
-    privileged: true
-    volumes:
-    - ./nfsd/exports:/etc/exports:ro
-    - ./media:/data/media:ro
-    - ./static:/data/static:ro
-    ports:
-    - "192.168.56.1:111:111/udp"
-    - "192.168.56.1:2049:2049/tcp"
-    - "192.168.56.1:2049:2049/udp"
+#  nfsd:
+#    build:
+#      context: nfsd
+#    privileged: true
+#    volumes:
+#    - ./nfsd/exports:/etc/exports:ro
+#    - ./media:/data/media:ro
+#    - ./static:/data/static:ro
+#    ports:
+#    - "192.168.56.1:111:111/udp"
+#    - "192.168.56.1:2049:2049/tcp"
+#    - "192.168.56.1:2049:2049/udp"
 
   nginx:
     build:

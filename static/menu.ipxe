@@ -17,6 +17,7 @@ item --key s alpine-standard        Alpine Linux - Standard
 item --key e alpine-extended        Alpine Linux - Extended
 item --key a archiso                Arch Linux (archiso)
 item --key c coreos                 CoreOS
+item --key e coreos-etcd            CoreOS with etcd
 item --key r rancher                RancherOS
 item --gap --             ------------------------- Advanced options -------------------------------
 item config       Configure settings
@@ -91,10 +92,13 @@ goto start
 
 
 :coreos
-echo Booting CoresOS ${base-url}
+:coreos-etcd
+set base-url ${http}/media/coreos
+set ignition ${base-url}/${selected}.ign
+echo Booting CoresOS ${base-url} from ${ignition}
 set opts sshkey="${sshkey}"
 set opts ${opts} coreos.autologin
-#set opts ${opts} coreos.first_boot=1 coreos.config.url=https://example.com/pxe-config.ign
+set opts ${opts} coreos.first_boot=1 coreos.config.url=${ignition}
 kernel ${base-url}/coreos_production_pxe.vmlinuz ${opts}
 initrd ${base-url}/coreos_production_pxe_image.cpio.gz
 
