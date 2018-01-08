@@ -30,6 +30,8 @@ set menu-timeout 0
 
 set base-nfs ${nfs}/media/${selected}
 set base-url ${http}/media/${selected}
+set static-url ${http}/static
+set media-url ${http}/media
 goto ${selected}
 
 :cancel
@@ -108,12 +110,12 @@ goto start
 :rancher
 echo Booting RancherOS ${base-url}
 
+set cc-url ${static-url}/rancher-cloud-config
 set opts
-#set opts ${opts} rancher.autologin
 set opts ${opts} rancher.autologin=tty1
 #set opts ${opts} rancher.state.dev=LABEL=RANCHER_STATE rancher.state.autoformat=[/dev/sda]
-set opts ${opts} rancher.password=nazarewk
-#set opts ${opts} rancher.cloud_init.datasources=[url:http://example.com/cloud-config]
+set opts ${opts} --
+set opts ${opts} rancher.cloud_init.datasources=[url:${cc-url}/base.yml,url:${cc-url}/${selected}.yml]
 kernel ${base-url}/vmlinuz ${opts}
 initrd ${base-url}/initrd
 
