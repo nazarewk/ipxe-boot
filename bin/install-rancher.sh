@@ -7,8 +7,14 @@ url=http://releases.rancher.com/os/${release}
 file_dir=$(dirname "$(readlink -f "$0")")
 base_dir=$(readlink -f ${file_dir}/..)
 dir=${base_dir}/media/rancher
-mkdir -p ${dir} && cd ${dir}
-mkdir -p ${dir}/cc
+cc_dir=${dir}/cc
+mkdir -p ${dir} ${cc_dir} && cd ${dir}
 
 wget -N ${url}/vmlinuz
 wget -N ${url}/initrd
+
+keys=$()
+
+echo "#cloud-config
+ssh_authorized_keys:
+$(ssh-add -L | sed 's/^/  - /g')" > ${cc_dir}/ssh.yml
