@@ -19,7 +19,8 @@ item --key a archiso                Arch Linux (archiso)
 item --key c coreos                 CoreOS
 item --key e coreos-etcd            CoreOS with etcd
 item --key r rancher                RancherOS
-item --key i clear-pxe             ClearLinux
+item --key i clear-pxe              ClearLinux
+item --key i ubuntu                 Ubuntu Cloud
 item --gap --             ------------------------- Advanced options -------------------------------
 item config       Configure settings
 item shell                Drop to iPXE shell
@@ -128,14 +129,6 @@ goto start
 :clear-pxe
 echo Booting ClearLinux
 
-set mcc-url ${base-url}/cc
-set scc-url ${static-url}/rancher-cloud-config
-set opts
-set opts ${opts} rancher.autologin=tty1
-#set opts ${opts} rancher.state.dev=LABEL=RANCHER_STATE rancher.state.autoformat=[/dev/sda]
-set opts ${opts} --
-set opts ${opts} rancher.cloud_init.datasources=[url:${scc-url}/base.yml,url:${mcc-url}/ssh.yml,url:${scc-url}/${selected}.yml]
-
 set opts
 set opts ${opts} quiet
 set opts ${opts} init=/usr/lib/systemd/systemd-bootchart
@@ -146,6 +139,21 @@ set opts ${opts} rw
 set opts ${opts} initrd=initrd
 
 kernel ${base-url}/linux ${opts}
+initrd ${base-url}/initrd
+
+boot || goto failed
+goto start
+
+:ubuntu
+echo Booting Ubuntu Cloud
+
+set opts
+set opts ${opts}
+
+echo Ubuntu Cloud boot not ready
+goto start
+
+kernel ${base-url}/vmlinuz ${opts}
 initrd ${base-url}/initrd
 
 boot || goto failed
