@@ -14,6 +14,11 @@ CONFIG_FILE=${inventory}/inventory.cfg python3 contrib/inventory_builder/invento
 
 cat > ${inventory}/group_vars/all.yml << EOF
 bootstrap_os: coreos
+loadbalancer_apiserver:
+  address: 0.0.0.0
+  port: 8080
+kubeconfig_localhost: true
+kubectl_localhost: true
 EOF
 
 ansible-playbook -i ${inventory}/inventory.cfg cluster.yml -b -v
