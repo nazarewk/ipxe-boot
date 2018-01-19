@@ -104,3 +104,4 @@ ENV/
 !/.idea/kubernetes-cluster.iml
 !/.idea/modules.xml
 !/.idea/misc.xml
+bin/rancher

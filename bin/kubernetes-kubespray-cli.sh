@@ -5,12 +5,16 @@ set -e
 get_coreos_nodes() {
   for node in $@
   do
-    echo node1[ansible_host=${node},bootstrap_os=coreos,ansible_user=core]
+    echo -n node1[
+    echo -n ansible_host=${node},
+    echo -n bootstrap_os=coreos,
+    echo -n ansible_user=core,
+    echo -n ansible_default_ipv4.address=${node}
+    echo ]
   done
 }
 
-NODES=(192.168.56.{10,12,13})
-NODES=($(get_coreos_nodes ${NODES[@]}))
+NODES=($(get_coreos_nodes 192.168.56.{10,12,13}))
 echo NODES=${NODES[@]}
 kubespray prepare -y --nodes ${NODES[@]}
 cat > ~/.kubespray/bootstrap-os.yml << EOF
