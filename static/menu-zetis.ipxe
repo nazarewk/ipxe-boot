@@ -1,0 +1,14 @@
+#!ipxe
+set http http://vol
+set ftp http://ftp/pub/
+
+set base-url ${ftp}/Linux/CoreOS/alpha
+set ignition ${http}/~nazarewk/coreos.ign
+
+set opts ${opts} coreos.autologin
+set opts ${opts} coreos.first_boot=1 coreos.config.url=${ignition}
+set opts ${opts} systemd.journald.max_level_console=debug
+kernel ${base-url}/coreos_production_pxe.vmlinuz ${opts}
+initrd ${base-url}/coreos_production_pxe_image.cpio.gz
+
+boot
