@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-#pip2 install ansible kubespray
+# pip2 install ansible kubespray
 get_coreos_nodes() {
   for node in $@
   do
@@ -17,7 +17,8 @@ get_coreos_nodes() {
 NODES=($(get_coreos_nodes 192.168.56.{10,12,13}))
 echo NODES=${NODES[@]}
 kubespray prepare -y --nodes ${NODES[@]}
-cat > ~/.kubespray/bootstrap-os.yml << EOF
+
+cat << EOF > ~/.kubespray/bootstrap-os.yml
 - hosts: all
   become: yes
   gather_facts: False

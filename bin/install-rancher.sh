@@ -15,6 +15,8 @@ wget -N ${url}/initrd
 
 keys=$()
 
-echo "#cloud-config
+cat << EOF > ${cc_dir}/ssh.yml
+#cloud-config
 ssh_authorized_keys:
-$(ssh-add -L | sed 's/^/  - /g')" > ${cc_dir}/ssh.yml
+$(ssh-add -L | sed 's/^/  - /g')
+EOF
